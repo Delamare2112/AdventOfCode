@@ -9,13 +9,24 @@ Box::Box(std::string line)
 	h = std::stoi(line.substr(xpos + 1), nullptr);
 }
 
-int Box::GetSurfaceArea()
+uint Box::GetSurfaceArea()
 {
-	unsigned int areaLW = l*w;
-	unsigned int areaWH = w*h;
-	unsigned int areaLH = l*h;
-	unsigned int slack = areaLW < areaWH ? areaLW : areaWH;
+	uint areaLW = l*w;
+	uint areaWH = w*h;
+	uint areaLH = l*h;
+	uint slack = areaLW < areaWH ? areaLW : areaWH;
 	if(slack > areaLH)
 		slack = areaLH;
 	return 2*areaLW + 2*areaWH + 2*areaLH + slack;
+}
+
+uint Box::GetRibbonAmmount()
+{
+	uint perimLW = l+l+w+w;
+	uint perimWH = w+w+h+h;
+	uint perimLH = l+l+h+h;
+	uint ribbon = perimLW < perimWH ? perimLW : perimWH;
+	if(ribbon > perimLH)
+		ribbon = perimLH;
+	return ribbon + (l*w*h);
 }
