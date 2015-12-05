@@ -13,7 +13,7 @@ int main(int argc, char const *argv[])
 	const std::string key = argv[1];
 	std::string result = "1234567890";
 	uint number = 0;
-	while(result.substr(0, 5) != "00000")
+	while(result.substr(0, 6) != "000000")
 	{
 		result = md5(key + std::to_string(number++));
 	}
