@@ -1,5 +1,7 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <algorithm>
 
 using std::string;
 
@@ -13,40 +15,40 @@ int main(int argc, char const *argv[])
 	std::ifstream fileSteam(argv[1]);
 	string line;
 
-	const string vowelchars = "aeiou";
-	const string badStrings[4] = {"ab", "cd", "pq", "xy"};
 	uint goodStrings = 0;
 
 	while(fileSteam.good())
 	{
 		line = "";
 		fileSteam >> line;
-		bool bad = false;
-		bool doubleLetters = false;
+
+		bool pairRepeat = false;
+		bool pairWithGap = false;
 		char previousChar = 0;
-		uint vowels = 0;
-		for(int i=0; i < 4; i++)
-		{
-			if(line.find(badStrings[i]) != string::npos)
-			{
-				bad	= true;
-				break;
-			}
-		}
-		if(bad)
-			continue;
+		std::vector<string> pairs(line.length());
+
 		for(int i=0; i < line.length(); i++)
 		{
 			char& c = line[i];
-			if(vowels <= 3 && vowelchars.find(c) != std::string::npos)
+			if(!pairRepeat)
 			{
-				vowels++;
+				string thisPair;
+				thisPair = previousChar;
+				thisPair += c;
+				const bool pairFound = std::find(pairs.begin(), pairs.end(), thisPair) != pairs.end();
+				const bool row3 = i > 1 && c == line[i-1] && c == line[i-2];
+				const bool row4 = i > 2 && c == line[i-3];
+				if((pairFound && !row3) || (pairFound && row4))
+					pairRepeat = true;
+				else
+					pairs.push_back(thisPair);
 			}
-			if(c == previousChar)
-				doubleLetters = true;
+
+			if(!pairWithGap && i > 1 && c == line[i-2])
+				pairWithGap = true;
 			previousChar = c;
 		}
-		if(doubleLetters && vowels > 2)
+		if(pairWithGap && pairRepeat)
 			goodStrings++;
 	}
 
