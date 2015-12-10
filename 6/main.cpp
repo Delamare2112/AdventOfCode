@@ -15,7 +15,7 @@ int main(int argc, char const *argv[])
 	}
 	std::ifstream fileStream(argv[1]);
 
-	bool grid[1000][1000] = {0};
+	uint grid[1000][1000] = {0};
 	uint lit = 0;
 
 	while(fileStream.good())
@@ -25,21 +25,21 @@ int main(int argc, char const *argv[])
 		{
 			for(int y = instruction.start.second; y <= instruction.end.second; y++)
 			{
-				bool& val = grid[x][y];
+				uint& val = grid[x][y];
 				switch(instruction.action)
 				{
 				case Action::Toggle:
-					val = !val; break;
+					val += 2; break;
 				case Action::On:
-					val = true; break;
+					val++; break;
 				case Action::Off:
-					val = false; break;
+					val -= val ? 1 : 0; break;
 				}
 			}
 		}
 	}
 
-	for(int x=0; x < 1000; x++) for(int y=0; y < 1000; y++) if(grid[x][y]) lit++;
+	for(int x=0; x < 1000; x++) for(int y=0; y < 1000; y++) if(grid[x][y]) lit += grid[x][y];
 
 	std::cout << "Lit: " << lit << std::endl;
 
