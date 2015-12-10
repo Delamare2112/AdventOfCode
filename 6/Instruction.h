@@ -4,7 +4,7 @@
 
 enum Action
 {
-  On, Off, Toggle
+  On, Off, Toggle, NOP
 };
 
 class Instruction
@@ -14,4 +14,3 @@ public:
   Action action;
   Instruction(std::ifstream& stream);
 };
-
